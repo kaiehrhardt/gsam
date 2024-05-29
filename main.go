@@ -1,12 +1,14 @@
 package main
 
 import (
+	"bytes"
+	"context"
 	"fmt"
-	"net/http"
 	"time"
 
 	"github.com/a-h/templ"
 	"github.com/gin-gonic/gin"
+	"github.com/samber/lo"
 	"github.com/xanzy/go-gitlab"
 
 	retryablehttp "github.com/hashicorp/go-retryablehttp"
@@ -15,8 +17,8 @@ import (
 type ServiceAccountRequest struct {
 	GlUrl       string `form:"glUrl" binding:"required"`
 	GlToken     string `form:"glToken" binding:"required"`
-	Name        string `form:"saName" binding:"required"`
-	Displayname string `form:"saDisplayName" binding:"required"`
+	Name        string `form:"saName"`
+	Displayname string `form:"saDisplayName"`
 }
 
 func RequestOptionFuncWithParam(params map[string]string) gitlab.RequestOptionFunc {
@@ -30,25 +32,45 @@ func RequestOptionFuncWithParam(params map[string]string) gitlab.RequestOptionFu
 	}
 }
 
+func Out(c *gin.Context, in string, b *bytes.Buffer) {
+	Output(in).Render(context.Background(), b)
+	c.String(200, b.String())
+}
+
 func Serviceaccount(c *gin.Context) {
 	var sar ServiceAccountRequest
+	params := map[string]string{}
+	buf := new(bytes.Buffer)
 	if err := c.ShouldBind(&sar); err != nil {
-		c.String(http.StatusBadRequest, fmt.Sprintf("err: %s", err.Error()))
+		Out(c, err.Error(), buf)
 		return
 	}
 	git, err := gitlab.NewClient(sar.GlToken, gitlab.WithBaseURL(fmt.Sprintf("%s/api/v4", sar.GlUrl)))
 	if err != nil {
-		c.String(http.StatusBadRequest, fmt.Sprintf("err: %s", err.Error()))
+		Out(c, err.Error(), buf)
 		return
 	}
-	// check if user is admin
-	user, _, err := git.Users.CreateServiceAccountUser(RequestOptionFuncWithParam(map[string]string{"name": sar.Displayname, "username": sar.Name}))
+	currentUser, _, err := git.Users.CurrentUser(RequestOptionFuncWithParam(params))
 	if err != nil {
-		c.String(http.StatusBadRequest, fmt.Sprintf("err: %s", err.Error()))
+		Out(c, err.Error(), buf)
 		return
 	}
-	c.JSON(http.StatusOK, user)
-	// c.Redirect(http.StatusFound, "/")
+	if !currentUser.IsAdmin {
+		Out(c, "err: current user doesn't have admin permissions", buf)
+		return
+	}
+	if len(sar.Displayname) > 0 {
+		params = lo.Assign(params, map[string]string{"name": sar.Displayname})
+	}
+	if len(sar.Name) > 0 {
+		params = lo.Assign(params, map[string]string{"username": sar.Name})
+	}
+	user, _, err := git.Users.CreateServiceAccountUser(RequestOptionFuncWithParam(params))
+	if err != nil {
+		Out(c, err.Error(), buf)
+		return
+	}
+	Out(c, user.Username, buf)
 }
 
 func main() {
