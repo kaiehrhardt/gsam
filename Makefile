@@ -2,9 +2,9 @@ generate:
 	templ generate
 
 build:
-	go build
+	go build -o app
 
 run:
-	./glabsa2
+	./app
 
 full: generate build run

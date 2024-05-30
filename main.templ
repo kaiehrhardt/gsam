@@ -5,19 +5,31 @@ import "fmt"
 templ Header(){
   <header class="d-flex justify-content-center m-2 p-1 border-bottom">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="#"><i class="bi bi-gitlab"></i></a>
+      <a class="navbar-brand" href="/"><i class="bi bi-gitlab"></i></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-          <div class="nav-item nav-link" hx-get="/home" hx-target="#content" hx-swap="outerHTML">Home</div>
-          <div class="nav-item nav-link" hx-get="/serviceaccount" hx-target="#content" hx-swap="outerHTML">ServiceAccounts</div>
-          <div class="nav-item nav-link" hx-get="/token" hx-target="#content" hx-swap="outerHTML">PersonalAccessTokens</div>
-        </div>
+        @NavbarLoggedOut()
       </div>
     </nav>
   </header>
+}
+
+templ NavbarLoggedIn(){
+  <div id="nav" class="navbar-nav" hx-get="/nav/logout" hx-trigger="logged-out from:body" hx-swap="outerHTML">
+    <div class="nav-item nav-link" hx-get="/sessionstore" hx-target="#content" hx-swap="outerHTML">SessionStore</div>
+    <div class="nav-item nav-link" hx-get="/serviceaccount" hx-target="#content" hx-swap="outerHTML">ServiceAccounts</div>
+    <div class="nav-item nav-link" hx-get="/token" hx-target="#content" hx-swap="outerHTML">PersonalAccessTokens</div>
+    <div class="nav-item nav-link" hx-get="/logout" hx-target="#content" hx-swap="outerHTML">Logout</div>
+  </div>
+}
+
+templ NavbarLoggedOut(){
+  <div id="nav" class="navbar-nav" hx-get="/nav/login" hx-trigger="logged-in from:body" hx-swap="outerHTML">
+    <div class="nav-item nav-link" hx-get="/login" hx-target="#content" hx-swap="outerHTML">Login</div>
+    <div class="nav-item nav-link" hx-get="/register" hx-target="#content" hx-swap="outerHTML">Register</div>
+  </div>
 }
 
 templ Home(){
@@ -37,11 +49,37 @@ templ Footer(year int){
   </footer>
 }
 
+templ Auth(mode string){
+  <div id="content" class="d-flex justify-content-center">
+    <form id="login" class="w-25 m-2 p-1" hx-post={ mode } hx-target="#content" hx-swap="outerHTML">
+      <input type="username" class="form-control m-2" name="name" placeholder="username" required>
+      <input type="password" class="form-control m-2" name="pass" placeholder="password" required>
+      <input type="submit" class="btn btn-primary rounded-pill m-2" value={ mode }>
+    </form>
+  </div>
+}
+
+templ LogoutComponent(){
+  <div id="content" class="d-flex justify-content-center">
+    <form class="w-25 m-2 p-1" hx-post="/logout" hx-target="#content" hx-swap="outerHTML">
+      <input class="btn btn-primary rounded-pill m-2" type="submit" value="Logout">
+    </form>
+  </div>
+}
+
+templ SetProfile(){
+  <div id="content" class="d-flex justify-content-center">
+    <form class="w-25 m-2 p-1" hx-post="/profile" hx-target="#content">
+      <input type="url" class="form-control m-2" name="glUrl" placeholder="Gitlab Url e.g. https://gitlab.example.com" required>
+      <input type="password" class="form-control m-2" name="glToken" placeholder="Gitlab Token e.g. glpat-..." required>
+      <input class="btn btn-primary rounded-pill m-2" type="submit" value="Store in Session">
+    </form>
+  </div>
+}
+
 templ CreateServiceUser(){
   <div id="content" class="d-flex justify-content-center">
     <form class="w-25 m-2 p-1" hx-post="/serviceaccount" hx-target="#content">
-      <input type="url" class="form-control m-2" name="glUrl" placeholder="Gitlab Url e.g. https://gitlab.example.com" required>
-      <input type="password" class="form-control m-2" name="glToken" placeholder="Gitlab Token e.g. glpat-..." required>
       <input type="text" class="form-control m-2" name="saName" placeholder="Service Account Name">
       <input type="text" class="form-control m-2" name="saDisplayName" placeholder="Service Account Display Name">
       <input class="btn btn-primary rounded-pill m-2" type="submit" value="Create">
@@ -52,8 +90,6 @@ templ CreateServiceUser(){
 templ CreatePersonalAccessToken(Scopes []string){
   <div id="content" class="d-flex justify-content-center">
     <form class="w-25 m-2 p-1" hx-post="/token" hx-target="#content">
-      <input type="url" class="form-control m-2" name="glUrl" placeholder="Gitlab Url e.g. https://gitlab.example.com" required>
-      <input type="password" class="form-control m-2" name="glToken" placeholder="Gitlab Token e.g. glpat-..." required>
       <input type="text" class="form-control m-2" name="UserID" placeholder="ID of the user" required>
       <input type="text" class="form-control m-2" name="Name" placeholder="Name of the personal access token" required>
       <input type="date" class="form-control m-2" name="ExpiresAt" placeholder="Expiration date of the access token in ISO format (YYYY-MM-DD)" required>
@@ -68,26 +104,26 @@ templ CreatePersonalAccessToken(Scopes []string){
 }
 
 templ Output(output string){
-  <div id="content" class="d-flex row justify-content-center w-50 m-2 p-1">
-    <div class="col">
+  <div id="content" class="d-flex justify-content-center">
+    <div class="w-50 m-2 p-1">
       { output }
+      <form hx-get="/home" hx-target="#content">
+        <input class="btn btn-primary rounded-pill m-2" type="submit" value="Back to Start">
+      </form>
     </div>
-    <form hx-get="/home" hx-target="#content">
-      <input class="btn btn-primary rounded-pill m-2" type="submit" value="Back to Start">
-    </form>
   </div>
 }
 
 templ OutputToken(token string){
-  <div id="content" class="d-flex row justify-content-center w-25 m-2 p-1">
-    <div class="col">
+  <div id="content" class="d-flex justify-content-center">
+    <div class="w-50 m-2 p-1">
       <input id="pass" type="password" class="form-control m-2" name="pat" value={ token }>
       <input type="checkbox" class="form-control m-2" onclick="reveal()"><i class="bi bi-eye"></i>
       Make sure you save it - you won't be able to access it again.
+      <form hx-get="/home" hx-target="#content">
+        <input class="btn btn-primary rounded-pill m-2" type="submit" value="Back to Start">
+      </form>
     </div>
-    <form hx-get="/home" hx-target="#content">
-      <input class="btn btn-primary rounded-pill m-2" type="submit" value="Back to Start">
-    </form>
   </div>
 }
 
