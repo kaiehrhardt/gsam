@@ -27,12 +27,16 @@ func RequestOptionFuncWithParam(params map[string]string) gitlab.RequestOptionFu
 }
 
 func Out(c *gin.Context, in string, b *bytes.Buffer) {
-	Output(in).Render(context.Background(), b)
+	if err := Output(in).Render(context.Background(), b); err != nil {
+		c.String(200, err.Error())
+	}
 	c.String(200, b.String())
 }
 
 func OutToken(c *gin.Context, in string, b *bytes.Buffer) {
-	OutputToken(in).Render(context.Background(), b)
+	if err := Output(in).Render(context.Background(), b); err != nil {
+		c.String(200, err.Error())
+	}
 	c.String(200, b.String())
 }
 
@@ -71,5 +75,7 @@ func main() {
 	r.POST("/token", Token)
 	r.POST("/sessionstore", SessionStore)
 
-	r.Run(":8080")
+	if err := r.Run(":8080"); err != nil {
+		log.Fatalln("Gin Run Error: ", err)
+	}
 }

@@ -1,0 +1,21 @@
+name: release
+on:
+  push:
+    branches:
+      - main
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          ssh-key: "${{ secrets.COMMIT_KEY }}"
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

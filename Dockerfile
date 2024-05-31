@@ -1,3 +1,4 @@
+# hadolint global ignore=DL3007
 FROM golang:1.22.1 AS fetch
 WORKDIR /app
 COPY go.mod go.sum
@@ -13,7 +14,7 @@ WORKDIR /app
 COPY --from=generate /app .
 RUN CGO_ENABLED=0 GOOS=linux go build -buildvcs=false -o app
 
-FROM gcr.io/distroless/base-debian12
+FROM gcr.io/distroless/base-debian12:latest
 WORKDIR /app
 COPY --from=build /app/app .
 EXPOSE 8080
