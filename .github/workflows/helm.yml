@@ -1,0 +1,47 @@
+name: helm
+on:
+  push:
+    branches:
+      - '**'
+      - '!main'
+    tags:
+      - '**'
+jobs:
+  helm:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          ssh-key: "${{ secrets.COMMIT_KEY }}"
+          fetch-depth: 0
+      - uses: azure/setup-helm@v4.2.0
+      - name: helm lint
+        run: |
+          helm lint charts/${{ github.event.repository.name }}
+      - name: Prepare
+        id: prep
+        run: |
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            CHART_VERSION=${GITHUB_REF/refs\/tags\//}
+            APP_VERSION=${GITHUB_REF/refs\/tags\//}
+          else
+            SHORT_REV=$(git rev-parse --short HEAD)
+            LAST_TAG=$(git describe --tags | cut -d"-" -f1)
+            CHART_VERSION=$(echo ${LAST_TAG}+${SHORT_REV})
+            APP_VERSION=${SHORT_REV}
+          fi
+          echo "CHART_VERSION=${CHART_VERSION}" >> $GITHUB_OUTPUT
+          echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_OUTPUT
+      - name: push helm chart
+        uses: appany/helm-oci-chart-releaser@v0.4.2
+        with:
+          name: ${{ github.event.repository.name }}
+          repository: ${{ github.repository_owner }}/charts
+          tag: ${{ steps.prep.outputs.CHART_VERSION }}
+          app_version: ${{ steps.prep.outputs.APP_VERSION }}
+          registry: ghcr.io
+          registry_username: ${{ github.actor }}
+          registry_password: ${{ secrets.GITHUB_TOKEN }}
