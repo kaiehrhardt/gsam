@@ -2,8 +2,10 @@ name: container build
 on:
   push:
     branches:
-      - main
-  pull_request:
+      - '**'
+      - '!master'
+    tags:
+      - '**'
   schedule:
     - cron: '0 0 * * *'
 jobs:
