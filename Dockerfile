@@ -12,9 +12,9 @@ RUN ["templ", "generate"]
 FROM golang:1.22.1 as build
 WORKDIR /app
 COPY --from=generate /app .
-RUN CGO_ENABLED=0 GOOS=linux go build -buildvcs=false -o app
+RUN GOOS=linux go build -buildvcs=false -o app
 
-FROM gcr.io/distroless/base-debian12:latest
+FROM gcr.io/distroless/base:latest
 WORKDIR /app
 COPY --from=build /app/app .
 EXPOSE 8080
