@@ -34,7 +34,7 @@ func Out(c *gin.Context, in string, b *bytes.Buffer) {
 }
 
 func OutToken(c *gin.Context, in string, b *bytes.Buffer) {
-	if err := Output(in).Render(context.Background(), b); err != nil {
+	if err := OutputToken(in).Render(context.Background(), b); err != nil {
 		c.String(200, err.Error())
 	}
 	c.String(200, b.String())

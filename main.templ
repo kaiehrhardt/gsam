@@ -69,7 +69,7 @@ templ LogoutComponent(){
 
 templ SessionComponent(){
   <div id="content" class="d-flex justify-content-center">
-    <form class="w-25 m-2 p-1" hx-post="/sessionstore" hx-target="#content">
+    <form class="w-25 m-2 p-1" hx-post="/sessionstore" hx-target="#content" hx-swap="outerHTML">
       <input type="url" class="form-control m-2" name="glUrl" placeholder="Gitlab Url e.g. https://gitlab.example.com" required>
       <input type="password" class="form-control m-2" name="glToken" placeholder="Gitlab Token e.g. glpat-..." required>
       <input class="btn btn-primary rounded-pill m-2" type="submit" value="Store in Session">
@@ -79,7 +79,7 @@ templ SessionComponent(){
 
 templ CreateServiceUser(){
   <div id="content" class="d-flex justify-content-center">
-    <form class="w-25 m-2 p-1" hx-post="/serviceaccount" hx-target="#content">
+    <form class="w-25 m-2 p-1" hx-post="/serviceaccount" hx-target="#content" hx-swap="outerHTML">
       <input type="text" class="form-control m-2" name="saName" placeholder="Service Account Name">
       <input type="text" class="form-control m-2" name="saDisplayName" placeholder="Service Account Display Name">
       <input class="btn btn-primary rounded-pill m-2" type="submit" value="Create">
@@ -89,7 +89,7 @@ templ CreateServiceUser(){
 
 templ CreatePersonalAccessToken(Scopes []string){
   <div id="content" class="d-flex justify-content-center">
-    <form class="w-25 m-2 p-1" hx-post="/token" hx-target="#content">
+    <form class="w-25 m-2 p-1" hx-post="/token" hx-target="#content" hx-swap="outerHTML">
       <input type="text" class="form-control m-2" name="UserID" placeholder="ID of the user" required>
       <input type="text" class="form-control m-2" name="Name" placeholder="Name of the personal access token" required>
       <input type="date" class="form-control m-2" name="ExpiresAt" placeholder="Expiration date of the access token in ISO format (YYYY-MM-DD)" required>
@@ -107,7 +107,7 @@ templ Output(output string){
   <div id="content" class="d-flex justify-content-center">
     <div class="w-50 m-2 p-1">
       { output }
-      <form hx-get="/home" hx-target="#content">
+      <form hx-get="/home" hx-target="#content" hx-swap="outerHTML">
         <input class="btn btn-primary rounded-pill m-2" type="submit" value="Back to Start">
       </form>
     </div>
@@ -116,11 +116,13 @@ templ Output(output string){
 
 templ OutputToken(token string){
   <div id="content" class="d-flex justify-content-center">
-    <div class="w-50 m-2 p-1">
-      <input id="pass" type="password" class="form-control m-2" name="pat" value={ token }>
-      <input type="checkbox" class="form-control m-2" onclick="reveal()"><i class="bi bi-eye"></i>
+    <div class="w-25 m-2 p-1">
+      <div class="input-group m-2">
+        <input id="pass" type="password" class="form-control" name="pat" value={ token } aria-label="pat" aria-describedby="pat-addon">
+        <span class="input-group-text" id="pat-addon" onclick="reveal()"><i class="bi bi-eye"></i></span>
+      </div>
       Make sure you save it - you won't be able to access it again.
-      <form hx-get="/home" hx-target="#content">
+      <form hx-get="/home" hx-target="#content" hx-swap="outerHTML">
         <input class="btn btn-primary rounded-pill m-2" type="submit" value="Back to Start">
       </form>
     </div>
