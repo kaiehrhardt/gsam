@@ -6,7 +6,7 @@ require (
 	github.com/a-h/templ v0.2.707
 	github.com/gin-contrib/sessions v1.0.1
 	github.com/gin-gonic/gin v1.10.0
-	github.com/hashicorp/go-retryablehttp v0.7.2
+	github.com/hashicorp/go-retryablehttp v0.7.7
 	github.com/mattn/go-sqlite3 v1.14.22
 	github.com/samber/lo v1.39.0
 	github.com/xanzy/go-gitlab v0.105.0
