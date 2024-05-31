@@ -61,7 +61,7 @@ func main() {
 	r.GET("/login", gin.WrapH(templ.Handler(Auth("login"))))
 	r.GET("/logout", AuthMiddleware(), gin.WrapH(templ.Handler(LogoutComponent())))
 	r.GET("/register", gin.WrapH(templ.Handler(Auth("register"))))
-	r.GET("/sessionstore", AuthMiddleware(), gin.WrapH(templ.Handler(SetProfile())))
+	r.GET("/sessionstore", AuthMiddleware(), gin.WrapH(templ.Handler(SessionComponent())))
 	r.GET("/nav/login", gin.WrapH(templ.Handler(NavbarLoggedIn())))
 	r.GET("/nav/logout", gin.WrapH(templ.Handler(NavbarLoggedOut())))
 

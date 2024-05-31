@@ -67,9 +67,9 @@ templ LogoutComponent(){
   </div>
 }
 
-templ SetProfile(){
+templ SessionComponent(){
   <div id="content" class="d-flex justify-content-center">
-    <form class="w-25 m-2 p-1" hx-post="/profile" hx-target="#content">
+    <form class="w-25 m-2 p-1" hx-post="/sessionstore" hx-target="#content">
       <input type="url" class="form-control m-2" name="glUrl" placeholder="Gitlab Url e.g. https://gitlab.example.com" required>
       <input type="password" class="form-control m-2" name="glToken" placeholder="Gitlab Token e.g. glpat-..." required>
       <input class="btn btn-primary rounded-pill m-2" type="submit" value="Store in Session">
