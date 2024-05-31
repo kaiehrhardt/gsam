@@ -35,7 +35,10 @@ func Login(db *sql.DB) gin.HandlerFunc {
 		if ok {
 			session := sessions.Default(c)
 			session.Set("user", u.Name)
-			session.Save()
+			if err := session.Save(); err != nil {
+				Out(c, err.Error(), buf)
+				return
+			}
 			c.Header("HX-Trigger", "logged-in")
 			Out(c, "Successfully logged in!", buf)
 		} else {
@@ -53,7 +56,10 @@ func Logout() gin.HandlerFunc {
 			session.Delete("user")
 			session.Delete("GlUrl")
 			session.Delete("GlToken")
-			session.Save()
+			if err := session.Save(); err != nil {
+				Out(c, err.Error(), buf)
+				return
+			}
 			c.Header("HX-Trigger", "logged-out")
 			Out(c, "Successfully logged out!", buf)
 		} else {

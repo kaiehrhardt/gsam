@@ -27,7 +27,10 @@ func SessionStore(c *gin.Context) {
 	if url == nil || token == nil {
 		session.Set("GlUrl", gc.GlUrl)
 		session.Set("GlToken", gc.GlToken)
-		session.Save()
+		if err := session.Save(); err != nil {
+			Out(c, err.Error(), buf)
+			return
+		}
 		Out(c, "GitlabUrl and GlToken successfully set.", buf)
 	} else {
 		Out(c, "GitlabUrl and GlToken already set.", buf)
