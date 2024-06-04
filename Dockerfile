@@ -1,5 +1,5 @@
 # hadolint global ignore=DL3007
-FROM golang:1.22.3 AS fetch
+FROM golang:1.22.4 AS fetch
 WORKDIR /app
 COPY go.mod go.sum
 RUN go mod download
@@ -9,7 +9,7 @@ WORKDIR /app
 COPY --chown=65532:65532 . .
 RUN ["templ", "generate"]
 
-FROM golang:1.22.3 as build
+FROM golang:1.22.4 as build
 WORKDIR /app
 COPY --from=generate /app .
 RUN GOOS=linux go build -buildvcs=false -o app
