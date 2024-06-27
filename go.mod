@@ -1,4 +1,4 @@
-module github.com/kaiehrhardt/glabsa2
+module github.com/kaiehrhardt/gsam
 
 go 1.22.1
 
