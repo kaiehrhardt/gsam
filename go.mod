@@ -8,7 +8,7 @@ require (
 	github.com/gin-gonic/gin v1.10.0
 	github.com/hashicorp/go-retryablehttp v0.7.7
 	github.com/mattn/go-sqlite3 v1.14.22
-	github.com/samber/lo v1.46.0
+	github.com/samber/lo v1.47.0
 	github.com/xanzy/go-gitlab v0.107.0
 	golang.org/x/crypto v0.26.0
 )
