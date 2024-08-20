@@ -27,6 +27,7 @@ var Scopes = []string{
 	"sudo",
 	"admin_mode",
 	"create_runner",
+	"manage_runner",
 	"ai_features",
 	"k8s_proxy",
 	"read_service_ping",
