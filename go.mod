@@ -3,7 +3,7 @@ module github.com/kaiehrhardt/gsam
 go 1.22.1
 
 require (
-	github.com/a-h/templ v0.2.771
+	github.com/a-h/templ v0.2.778
 	github.com/gin-contrib/sessions v1.0.1
 	github.com/gin-gonic/gin v1.10.0
 	github.com/hashicorp/go-retryablehttp v0.7.7
