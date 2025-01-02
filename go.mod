@@ -1,9 +1,11 @@
 module github.com/kaiehrhardt/gsam
 
-go 1.22.1
+go 1.23
+
+toolchain go1.23.4
 
 require (
-	github.com/a-h/templ v0.2.793
+	github.com/a-h/templ v0.3.819
 	github.com/gin-contrib/sessions v1.0.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/hashicorp/go-retryablehttp v0.7.7
