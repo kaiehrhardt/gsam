@@ -4,7 +4,7 @@ WORKDIR /app
 COPY --chown=65532:65532 main.templ .
 RUN ["templ", "generate"]
 
-FROM registry.hub.docker.com/library/golang:1.23.5 as build
+FROM registry.hub.docker.com/library/golang:1.24.0 as build
 WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
