@@ -2,7 +2,7 @@ module github.com/kaiehrhardt/gsam
 
 go 1.23
 
-toolchain go1.23.5
+toolchain go1.24.0
 
 require (
 	github.com/a-h/templ v0.3.833
