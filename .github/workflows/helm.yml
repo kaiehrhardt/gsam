@@ -17,7 +17,7 @@ jobs:
         with:
           ssh-key: "${{ secrets.COMMIT_KEY }}"
           fetch-depth: 0
-      - uses: azure/setup-helm@v4.2.0
+      - uses: azure/setup-helm@v4.3.0
       - name: helm lint
         run: |
           helm lint charts/${{ github.event.repository.name }}
