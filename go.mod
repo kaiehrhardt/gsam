@@ -1,6 +1,6 @@
 module github.com/kaiehrhardt/gsam
 
-go 1.23
+go 1.23.0
 
 toolchain go1.24.0
 
@@ -12,7 +12,7 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.24
 	github.com/samber/lo v1.49.1
 	github.com/xanzy/go-gitlab v0.114.0
-	golang.org/x/crypto v0.33.0
+	golang.org/x/crypto v0.34.0
 )
 
 require (
