@@ -5,7 +5,7 @@ go 1.23.0
 toolchain go1.24.1
 
 require (
-	github.com/a-h/templ v0.3.856
+	github.com/a-h/templ v0.3.857
 	github.com/gin-contrib/sessions v1.0.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/hashicorp/go-retryablehttp v0.7.7
