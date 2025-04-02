@@ -13,7 +13,7 @@ jobs:
           go install github.com/a-h/templ/cmd/templ@latest
           templ generate
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v6
+        uses: golangci/golangci-lint-action@v7
         with:
           version: latest
   hadolint:
