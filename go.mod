@@ -5,7 +5,7 @@ go 1.23.0
 toolchain go1.24.2
 
 require (
-	github.com/a-h/templ v0.3.857
+	github.com/a-h/templ v0.3.865
 	github.com/gin-contrib/sessions v1.0.3
 	github.com/gin-gonic/gin v1.10.0
 	github.com/hashicorp/go-retryablehttp v0.7.7
@@ -43,7 +43,7 @@ require (
 	github.com/ugorji/go/codec v1.2.12 // indirect
 	golang.org/x/arch v0.16.0 // indirect
 	golang.org/x/exp v0.0.0-20220303212507-bbda1eaf7a17 // indirect
-	golang.org/x/net v0.38.0 // indirect
+	golang.org/x/net v0.39.0 // indirect
 	golang.org/x/oauth2 v0.6.0 // indirect
 	golang.org/x/sys v0.32.0 // indirect
 	golang.org/x/text v0.24.0 // indirect
