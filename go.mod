@@ -11,7 +11,7 @@ require (
 	github.com/hashicorp/go-retryablehttp v0.7.7
 	github.com/mattn/go-sqlite3 v1.14.28
 	github.com/samber/lo v1.50.0
-	github.com/xanzy/go-gitlab v0.114.0
+	github.com/xanzy/go-gitlab v0.115.0
 	golang.org/x/crypto v0.38.0
 )
 
